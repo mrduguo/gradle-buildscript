@@ -1,0 +1,28 @@
+/** USAGE
+
+ ./gradlew
+
+ ./gradlew -x test
+ ./gradlew -Dtest.single=RunGradleBuildTest
+ ./gradlew -Dtest.single=RunGradleBuildTest -DtestBuildParams=bld_stats
+ ./gradlew -Dtest.single=utils/**\/
+ ./gradlew -x test && ./gradlew -b debug-task.gradle -DtaskName=bld_stats # then right click on the task to debug in debug-task.gradle
+
+
+ ./gradlew -Dtest.single=BldUpgradeTaskTest -DtargetProjectRoot=/opt/statico/src/gs-spring-boot-spock
+
+ export AWS_CREDENTIAL_PROFILES_FILE=credentials
+ JOB_NAME=ci-buildscript ./gradlew
+
+ */
+
+
+apply plugin: 'com.github.mrduguo.gradle.buildscript'
+
+/** Sample Build Commands
+
+ ./gradlew bld_stats
+
+ ./gradlew bld_package_as_zip
+
+ */

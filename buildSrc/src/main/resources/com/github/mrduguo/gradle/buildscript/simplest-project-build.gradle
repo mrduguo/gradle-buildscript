@@ -1,0 +1,30 @@
+/** DO NOT CHANGE THIS FILE BY HAND
+
+ (        )       )    )                    )           )
+ )\ )  ( /(    ( /( ( /(   *   )     (   ( /(  (     ( /( (
+ (()/(  )\())   )\()))\())` )  /(     )\  )\()) )\    )\()))\ )   (
+ /(_))((_)\   ((_)\((_)\  ( )(_))  (((_)((_)((((_)( ((_)\(()/(   )\
+ (_))_   ((_)   _((_) ((_)(_(_())   )\___ _((_)\ _ )\ _((_)/(_))_((_)
+ |   \ / _ \  | \| |/ _ \|_   _|  ((/ __| || (_)_\(_) \| (_)) __| __|
+ | |) | (_) | | .` | (_) | | |     | (__| __ |/ _ \ | .` | | (_ | _|
+ |___/ \___/  |_|\_|\___/  |_|      \___|_||_/_/ \_\|_|\_|  \___|___|
+
+
+
+ # SAMPLE BUILD COMMANDS
+
+ ./gradlew
+
+ ./gradlew -x test
+
+ ./gradlew -Dtest.single=MyTest
+
+ ./gradlew run
+
+
+ */
+
+buildscript {
+    apply from: System.properties.buildscriptUrl ?: "${System.properties.mavenRepoUrl ?: 'https://s3-eu-west-1.amazonaws.com/elasticbeanstalk-eu-west-1-349318639323/maven-repo/'}com/github/mrduguo/gradle/buildscript/buildscript.gradle"
+}
+apply plugin: 'com.github.mrduguo.gradle.buildscript'

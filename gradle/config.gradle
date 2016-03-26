@@ -1,0 +1,26 @@
+sourceSets {
+    main {
+        groovy {
+            srcDir 'buildSrc/src/main/groovy'
+        }
+        resources {
+            srcDir 'buildSrc/src/main/resources'
+        }
+    }
+}
+
+configurations {
+    compile.exclude module: 'groovy'
+    compile.exclude module: 'groovy-all'
+}
+
+
+processResources {
+    filesMatching('**/buildscript.*') {
+        filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                libBuildscriptVersion: version,
+                mavenRepoUrl           : mavenRepoUrl,
+        ]
+    }
+}
+
