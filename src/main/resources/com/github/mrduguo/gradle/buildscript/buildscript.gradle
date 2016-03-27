@@ -44,7 +44,7 @@ project.buildscript{
                 mayNotGitRepo.printStackTrace()
             }
         }
-        classpath "com.github.mrduguo.gradle:buildscript:$versionRange".toString()
+        classpath "com.github.mrduguo.gradle:gradle-buildscript:$versionRange".toString()
         configurations.classpath.resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
     }
 }

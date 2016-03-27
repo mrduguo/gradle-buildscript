@@ -31,11 +31,11 @@ class BldProjectPlugin implements Plugin<Project> {
 
     def publishInitScriptToBintray(Project project,Task bintrayUpload) {
         try{
-            new URL("${project.ext.mavenRepoUrl}com/github/mrduguo/gradle/buildscript/buildscript.gradle").text
+            new URL("${project.ext.mavenRepoUrl}com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle").text
         }catch (Exception ex){
             Copy recordingPublishInitScriptTask = project.getTasks().create('recordingPublishInitScriptTask', RecordingCopyTask.class)
             recordingPublishInitScriptTask.from(project.file('build/resources/main/com/github/mrduguo/gradle/buildscript/buildscript.gradle'))
-            recordingPublishInitScriptTask.into('com/github/mrduguo/gradle/buildscript/')
+            recordingPublishInitScriptTask.into('com/github/mrduguo/gradle/gradle-buildscript/')
             recordingPublishInitScriptTask.outputs.upToDateWhen {
                 false
             }

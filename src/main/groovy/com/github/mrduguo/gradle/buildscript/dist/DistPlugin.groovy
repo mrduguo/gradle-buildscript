@@ -12,12 +12,13 @@ import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 class DistPlugin implements Plugin<Project> {
 
     public static boolean isBintrayRepoEnabled(){
-        Env.config('mavenRepoUrl')?.startsWith('https://dl.bintray.com/') && Env.config('distBintrayKey')
+        Env.config('distBintrayKey')
     }
 
     @Override
     void apply(Project project) {
         setupProjectRepository()
+        project.ext.matchBuildscriptVersion=generateMatchVersion(project)
         if (project.file('src/main').exists()) {
             project.getPlugins().apply(MavenPublishPlugin)
             project.plugins.apply(com.jfrog.bintray.gradle.BintrayPlugin)
@@ -27,6 +28,20 @@ class DistPlugin implements Plugin<Project> {
                 }
             }
         }
+    }
+
+    def generateMatchVersion(Project project) {
+        def baseVersion=project.ext.libBuildscriptVersion.split('-').first()
+        def versionParts = baseVersion.split('\\.')
+        def matchVersionParts=[]
+        versionParts.eachWithIndex { String part, int i ->
+            if((i+1)==versionParts.size()){
+                matchVersionParts << part.toInteger()+1
+            }else{
+                matchVersionParts << part
+            }
+        }
+        "(,${matchVersionParts.join('.')})"
     }
 
     def setupProjectRepository() {
@@ -146,18 +161,22 @@ class DistPlugin implements Plugin<Project> {
     }
 
     def void enableBintrayDist(Project project) {
+        def (defaultUser,defaultRepo)=parseBintrayUserAndRepo(project)
         def bintrayExtension = project.extensions.findByName('bintray')
+        def distBintrayPackage = Env.config('distBintrayPackage', "${Env.artifactId()}")
+        def userName = Env.config('distBintrayUser', defaultUser)
+        def orgName = Env.config('distBintrayOrg', userName)
         bintrayExtension.with {
-            user = Env.config('distBintrayUser')
+            user = userName
             key = Env.config('distBintrayKey')
             publications = ['maven']
             publish = true
             pkg {
-                repo = Env.config('distBintrayRepo','maven')
-                name = Env.config('distBintrayPackage','gradle-buildscript')
-                userOrg = Env.config('distBintrayOrg',Env.config('distBintrayUser'))
+                repo = Env.config('distBintrayRepo',defaultRepo)
+                name = distBintrayPackage
+                userOrg = orgName
                 licenses = ['Apache-2.0']
-                vcsUrl = Env.config('distBintrayVcsUrl',"https://github.com/${Env.config('distBintrayOrg',Env.config('distBintrayUser'))}/${Env.config('distBintrayPackage','gradle-buildscript')}/${}.git")
+                vcsUrl = Env.config('distBintrayVcsUrl',"https://github.com/${orgName}/${distBintrayPackage}.git")
             }
         }
 
@@ -166,6 +185,18 @@ class DistPlugin implements Plugin<Project> {
         bintrayUpload.dependsOn ProjectHelper.getTask('check')
     }
 
+    def parseBintrayUserAndRepo(Project project) {
+        def user,repoName
+        project.buildscript.repositories.each { def repo ->
+            def repoUrl = repo.url.toString()
+            if (repoUrl.startsWith('https://dl.bintray.com/')) {
+                def repoInfo=repoUrl.split('/')
+                user=repoInfo[-2]
+                repoName=repoInfo[-1]
+            }
+        }
+        [user,repoName]
+    }
     def detectGroupIdBasedSource(Project project) {
         def rootFolder = findProjectRootFolder(project.file('src/main/groovy'),0)
         if (rootFolder == null) {

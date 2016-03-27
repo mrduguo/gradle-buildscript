@@ -66,7 +66,10 @@ ${templateBuildGradle.join('\n')}\
     }
 
     def runGradlewBuild(def args=''){
-        def processRunner=new ProcessRunner(dir: testProjectDir,cmd:"./gradlew $args")
+        def processRunner=new ProcessRunner(dir: testProjectDir,cmds:[
+                "unset distBintrayKey",
+                "./gradlew $args",
+        ])
         processRunner.execute()
     }
 

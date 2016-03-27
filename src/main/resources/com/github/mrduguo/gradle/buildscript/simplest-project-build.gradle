@@ -25,6 +25,6 @@
  */
 
 buildscript {
-    apply from: System.properties.buildscriptUrl ?: "${System.properties.mavenRepoUrl ?: 'https://dl.bintray.com/mrduguo/maven/'}com/github/mrduguo/gradle/buildscript/buildscript.gradle"
+    apply from: System.properties.buildscriptUrl ?: "${System.properties.mavenRepoUrl ?: 'https://dl.bintray.com/mrduguo/maven/'}com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle"
 }
 apply plugin: 'com.github.mrduguo.gradle.buildscript'

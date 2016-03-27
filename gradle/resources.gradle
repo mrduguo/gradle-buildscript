@@ -49,7 +49,7 @@ BUILD_URL=${System.getenv().BUILD_URL}
 BUILD_USER_ID=${System.getenv().BUILD_USER_ID?:System.getenv().BUILD_USER?:System.getProperty('user.name')}
 BUILD_SCRIPT_VERSION=$version\
 """)
-    if(new File(project.buildDir,'resources/main/buildscript.gitignore').exists()){
+    if(project.file(resourceBasePath+'.gitignore').exists()){
         new File(project.buildDir,'resources/main/buildscript.gitignore').write(project.file(resourceBasePath+'.gitignore').text)
     }
 }

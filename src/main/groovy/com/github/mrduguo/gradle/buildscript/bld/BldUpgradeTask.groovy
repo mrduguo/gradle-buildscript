@@ -51,7 +51,7 @@ class BldUpgradeTask extends DefaultTask {
         if (targetPath == 'build.gradle') {
             def buildGradleFile = new File(targetProjectRoot, targetPath)
             if (buildGradleFile.exists()) {
-                if (!buildGradleFile.text.contains('/com/github/mrduguo/gradle/buildscript/buildscript.gradle')) {
+                if (!buildGradleFile.text.contains('com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle')) {
                     def dependenciesGradleFile = new File(targetProjectRoot, 'gradle/dependencies.gradle')
                     dependenciesGradleFile.write(buildGradleFile.text)
                 }

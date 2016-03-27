@@ -47,8 +47,16 @@ class JvmPlugin implements Plugin<Project> {
                         setupSourceJarTasks(project)
                     }
                 }
+
+                ProjectHelper.doIfTaskExist('jar') {def jarTask->
+                    jarTask.setArchiveName(Env.artifactId() + "-" + project.version + ".jar")
+                }
                 project.sourceCompatibility = '1.7'
                 project.targetCompatibility = '1.7'
+
+                //TODO to verify in gradle-sample-app project
+                project.configurations.compile.resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+                project.configurations.testCompile.resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
             }
         }
 

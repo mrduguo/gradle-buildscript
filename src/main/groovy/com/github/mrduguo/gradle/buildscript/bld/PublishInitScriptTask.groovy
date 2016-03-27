@@ -9,7 +9,7 @@ class PublishInitScriptTask extends DefaultTask {
 
     @TaskAction
     def run() {
-        publishFile(project.file('build/resources/main/com/github/mrduguo/gradle/buildscript/buildscript.gradle'), 'com/github/mrduguo/gradle/buildscript/buildscript.gradle')
+        publishFile(project.file('build/resources/main/com/github/mrduguo/gradle/buildscript/buildscript.gradle'), 'com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle')
         println """Usage:
 
         ./gradlew -DmavenRepoUrl=$project.ext.mavenRepoUrl

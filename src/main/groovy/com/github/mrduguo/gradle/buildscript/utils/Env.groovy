@@ -22,12 +22,7 @@ class Env {
     public static String artifactId() {
         def name = config('artifactId')
         if (!name) {
-            def jenkinsJobName = jobName()
-            if (jenkinsJobName && jenkinsJobName.contains('-')) {
-                name = jobName().split('-')[1]
-            } else {
-                name = new File(Paths.get('').toFile().absolutePath).name
-            }
+            name = new File(Paths.get('').toFile().absolutePath).name
         }
         name
     }
