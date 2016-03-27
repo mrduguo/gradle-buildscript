@@ -14,7 +14,7 @@ abstract class AbstractGradlewTest extends GroovyTestCase {
     @Override
     void setUp() {
         super.setUp()
-        testProjectDir=new File("build/gradle-test-projects/${getClass().simpleName}_$name")
+        testProjectDir=new File("build/gradle-test-projects/${getClass().simpleName}")
         testProjectDir.mkdirs()
     }
 
@@ -56,6 +56,11 @@ ${templateBuildGradle.join('\n')}\
 
         Files.copy(Paths.get(new File(testProjectDir,'../../../gradlew').toURI()), Paths.get(new File(testProjectDir,'gradlew').toURI()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING)
 
+
+        def projectSources=new File('src/test/resources/gradle-test-projects',testProjectDir.name)
+        if(projectSources.exists()){
+            FileUtils.copyDirectory(projectSources,testProjectDir)
+        }
 
         println "prepared gradle project to: $testProjectDir.absolutePath"
     }

@@ -6,7 +6,7 @@ A build system inspired by [spring boot auto configure|https://docs.spring.io/sp
 
 ```
 buildscript {
-    apply from: System.properties.buildscriptUrl ?: "${System.properties.mavenRepoUrl ?: 'https://s3-eu-west-1.amazonaws.com/elasticbeanstalk-eu-west-1-349318639323/maven-repo/'}com/github/mrduguo/gradle/buildscript/buildscript.gradle"
+    apply from: System.properties.buildscriptUrl ?: "${System.properties.mavenRepoUrl ?: 'https://dl.bintray.com/mrduguo/maven/'}com/github/mrduguo/gradle/buildscript/buildscript.gradle"
 }
 apply plugin: 'com.github.mrduguo.gradle.buildscript'
 ```

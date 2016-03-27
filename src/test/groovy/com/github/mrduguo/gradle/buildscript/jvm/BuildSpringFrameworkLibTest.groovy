@@ -7,11 +7,10 @@ class BuildSpringFrameworkLibTest extends AbstractGradlewTest {
 
     def void testRun() {
         prepareGradleProject()
-        def artifactId='spring_framework_sample_project'
-        FileUtils.copyDirectory(new File("src/test/resources/$artifactId"),testProjectDir)
-        runGradlewBuild("-DartifactId=$artifactId ${System.properties.testBuildParams ?: ''}")
+        def artifactId='samplelib'
+        runGradlewBuild()
 
-        def releasedArtifactFolder=new File(testProjectDir,"build/repo/libs/$artifactId")
+        def releasedArtifactFolder=new File(testProjectDir,"build/repo/com/github/mrduguo/gradle/$artifactId")
         assert releasedArtifactFolder.exists()
 
         File releasedVersionFolder

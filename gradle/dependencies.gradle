@@ -1,5 +1,5 @@
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -12,5 +12,6 @@ dependencies {
     compile 'commons-lang:commons-lang:2.6'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.1'
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 }

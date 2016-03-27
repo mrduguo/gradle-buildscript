@@ -1,0 +1,57 @@
+def isRootProject=file('gradle.properties').exists()
+def resourceBasePath=isRootProject?'':'../'
+
+ext {
+    mavenRepoUrl = System.properties.mavenRepoUrl ?: (System.properties.JOB_NAME?:System.getenv().JOB_NAME) ? 'https://dl.bintray.com/mrduguo/maven/' : "file://$rootProject.projectDir/build/repo/".toString()
+    gitBranch=System.properties.GIT_BRANCH ?: System.getenv().GIT_BRANCH ?: 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+    gitCommit=System.getenv().GIT_COMMIT?.substring(0,7) ?: 'git rev-parse --short HEAD'.execute().text.trim()
+
+    if(System.properties.projectBaseVersion){
+        projectBaseVersion=System.properties.projectBaseVersion
+    }else{
+        def branchVersionMatcher = (gitBranch =~ /\/((\d+\.\d+\.)(\d+))/)
+        if (branchVersionMatcher.find()) {
+            branchVersionMatcher = branchVersionMatcher[0]
+            projectBaseVersion = branchVersionMatcher[1]
+        } else {
+            file(resourceBasePath+'gradle.properties').eachLine {String line->
+                if(line.startsWith('baseVersion=')){
+                    projectBaseVersion = line.split('=',2)[1].trim()
+                }
+            }
+        }
+    }
+}
+
+version = "$projectBaseVersion-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}-$gitCommit-${System.getenv().BUILD_NUMBER?:'0'}".toString()
+
+
+processResources {
+    filesMatching('**/buildscript.*') {
+        filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                libBuildscriptVersion: version,
+                mavenRepoUrl           : mavenRepoUrl,
+        ]
+    }
+}
+
+
+task generateBuildInfo() << {
+    new File(project.buildDir,'resources/main/buildscript-build-info.properties').write("""\
+ARTIFACT_NAME=buildscript
+ARTIFACT_VERSION=$version
+GIT_BRANCH=$gitBranch
+GIT_COMMIT=$gitCommit
+GRADLE_VERSION=${project.file(resourceBasePath+'gradle/wrapper/gradle-wrapper.properties').text.split('-')[-2]}
+MAVEN_REPO_URL=$mavenRepoUrl
+BUILD_TIMESTAMP=${new Date()}
+BUILD_URL=${System.getenv().BUILD_URL}
+BUILD_USER_ID=${System.getenv().BUILD_USER_ID?:System.getenv().BUILD_USER?:System.getProperty('user.name')}
+BUILD_SCRIPT_VERSION=$version\
+""")
+    if(new File(project.buildDir,'resources/main/buildscript.gitignore').exists()){
+        new File(project.buildDir,'resources/main/buildscript.gitignore').write(project.file(resourceBasePath+'.gitignore').text)
+    }
+}
+generateBuildInfo.dependsOn processResources
+jar.dependsOn generateBuildInfo

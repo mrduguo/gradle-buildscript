@@ -45,9 +45,8 @@ class BuildSpringBootAppTest extends AbstractGradlewTest {
 
     def void testRun() {
         prepareGradleProject()
-        def artifactId='spring_boot_sample_project'
-        FileUtils.copyDirectory(new File("src/test/resources/$artifactId"),testProjectDir)
-        runGradlewBuild("-DartifactId=$artifactId ${System.properties.testBuildParams ?: ''}")
+        def artifactId='sampleapp'
+        runGradlewBuild()
 
         def releasedArtifactFolder=new File(testProjectDir,"build/repo/apps/$artifactId")
         assert releasedArtifactFolder.exists()
