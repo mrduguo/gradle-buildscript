@@ -161,7 +161,6 @@ proguard/
 .cache
 .history
 .lib/
-dist/*
 lib_managed/
 src_managed/
 project/boot/
@@ -183,14 +182,12 @@ __pycache__/
 .Python
 env/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
 lib/
 lib64/
 parts/
-sdist/
 var/
 *.egg-info/
 .installed.cfg
