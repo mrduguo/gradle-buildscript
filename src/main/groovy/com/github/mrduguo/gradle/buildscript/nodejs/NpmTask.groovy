@@ -3,6 +3,7 @@ package com.github.mrduguo.gradle.buildscript.nodejs
 import com.github.mrduguo.gradle.buildscript.utils.Env
 import com.github.mrduguo.gradle.buildscript.utils.ProcessRunner
 import com.google.gson.Gson
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
@@ -40,14 +41,15 @@ class NpmTask extends DefaultTask {
     def generateCmds() {
         cmds = []
         def packageJson = new Gson().fromJson(packageJsonFile.text, Map)
-        def nodeVersion = detectNodeVersion(packageJson)
-        def nvmFile = new File(System.getProperty('user.home'), '.nvm/nvm.sh')
-        if (!nvmFile.exists()) {
-            cmds << "curl -o- https://raw.githubusercontent.com/creationix/nvm/${Env.config('nvmVersion', 'v0.30.2')}/install.sh | bash"
+        if(!Os.isFamily(Os.FAMILY_WINDOWS)){
+            def nodeVersion = detectNodeVersion(packageJson)
+            def nvmFile = new File(System.getProperty('user.home'), '.nvm/nvm.sh')
+            if (!nvmFile.exists()) {
+                cmds << "curl -o- https://raw.githubusercontent.com/creationix/nvm/${Env.config('nvmVersion', 'v0.30.2')}/install.sh | bash"
+            }
+            cmds << '. ~/.nvm/nvm.sh'
+            cmds << "nvm install $nodeVersion\n"
         }
-        cmds << '. ~/.nvm/nvm.sh'
-
-        cmds << "nvm install $nodeVersion\n"
         cmds << "cd $workingDir.absolutePath"
         cmds << "npm install"
 
