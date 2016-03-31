@@ -5,7 +5,7 @@ ext {
     mavenRepoUrl = System.properties.mavenRepoUrl ?: (System.properties.JOB_NAME?:System.getenv().JOB_NAME) ? 'https://dl.bintray.com/mrduguo/maven/' : "file://$rootProject.projectDir/build/repo/".toString()
     gitBranch=System.properties.GIT_BRANCH ?: System.getenv().GIT_BRANCH ?: 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
     gitCommit=System.getenv().GIT_COMMIT?.substring(0,7) ?: 'git rev-parse --short HEAD'.execute().text.trim()
-
+println "mavenRepoUrl from config.gradle: $mavenRepoUrl"
     if(System.properties.projectBaseVersion){
         projectBaseVersion=System.properties.projectBaseVersion
     }else{
