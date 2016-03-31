@@ -31,11 +31,9 @@ class BldProjectPlugin implements Plugin<Project> {
     }
 
     def publishInitScriptToBintray(Project project,Task bintrayUpload) {
-        println "target url: ${Env.config('mavenRepoUrl')}com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle"
         try{
             new URL("${Env.config('mavenRepoUrl')}com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle").text
         }catch (Exception ex){
-            ex.printStackTrace()
             Copy recordingPublishInitScriptTask = project.getTasks().create('recordingPublishInitScriptTask', RecordingCopyTask.class)
             recordingPublishInitScriptTask.from(project.file('build/resources/main/com/github/mrduguo/gradle/buildscript/buildscript.gradle'))
             recordingPublishInitScriptTask.into('com/github/mrduguo/gradle/gradle-buildscript/')
