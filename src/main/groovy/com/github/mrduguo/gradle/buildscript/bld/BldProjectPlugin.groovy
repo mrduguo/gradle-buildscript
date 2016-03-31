@@ -35,7 +35,7 @@ class BldProjectPlugin implements Plugin<Project> {
         }catch (Exception ex){
             Copy recordingPublishInitScriptTask = project.getTasks().create('recordingPublishInitScriptTask', RecordingCopyTask.class)
             recordingPublishInitScriptTask.from(project.file('build/resources/main/com/github/mrduguo/gradle/buildscript/buildscript.gradle'))
-            recordingPublishInitScriptTask.into('com/github/mrduguo/gradle/gradle-buildscript/')
+            recordingPublishInitScriptTask.into('/com/github/mrduguo/gradle/gradle-buildscript/')
             recordingPublishInitScriptTask.outputs.upToDateWhen {
                 false
             }
