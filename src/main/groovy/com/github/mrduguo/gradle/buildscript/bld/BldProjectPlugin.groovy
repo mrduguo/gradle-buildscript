@@ -1,6 +1,7 @@
 package com.github.mrduguo.gradle.buildscript.bld
 
 import com.github.mrduguo.gradle.buildscript.dist.DistPlugin
+import com.github.mrduguo.gradle.buildscript.utils.Env
 import com.github.mrduguo.gradle.buildscript.utils.ProjectHelper
 import com.jfrog.bintray.gradle.RecordingCopyTask
 import org.gradle.api.Plugin
@@ -30,12 +31,13 @@ class BldProjectPlugin implements Plugin<Project> {
     }
 
     def publishInitScriptToBintray(Project project,Task bintrayUpload) {
+        println "target url: ${Env.config('mavenRepoUrl')}com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle"
         try{
-            new URL("${project.ext.mavenRepoUrl}com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle").text
+            new URL("${Env.config('mavenRepoUrl')}com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle").text
         }catch (Exception ex){
             Copy recordingPublishInitScriptTask = project.getTasks().create('recordingPublishInitScriptTask', RecordingCopyTask.class)
             recordingPublishInitScriptTask.from(project.file('build/resources/main/com/github/mrduguo/gradle/buildscript/buildscript.gradle'))
-            recordingPublishInitScriptTask.into('/com/github/mrduguo/gradle/gradle-buildscript/')
+            recordingPublishInitScriptTask.into('com/github/mrduguo/gradle/gradle-buildscript/')
             recordingPublishInitScriptTask.outputs.upToDateWhen {
                 false
             }
