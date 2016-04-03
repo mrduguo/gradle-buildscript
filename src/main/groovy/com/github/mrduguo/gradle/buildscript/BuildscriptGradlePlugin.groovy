@@ -28,7 +28,7 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
 
     def initEnvironment(Project project) {
         Properties pro = new Properties()
-        pro.load(getClass().getResourceAsStream('buildscript.properties'))
+        pro.load(getClass().getResourceAsStream('/com/github/mrduguo/gradle/buildscript/buildscript.properties'))
         pro.each { k, v ->
             project.ext.set(k, v)
         }
@@ -38,7 +38,7 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
         }else{
             baseVersion=project.ext.libBuildscriptVersion.split('-').first()
         }
-        project.version = "${baseVersion}-${new Date().format('yyMMdd-HHmmss')}-${Env.config('GIT_COMMIT')?.substring(0, 7) ?: 'git rev-parse --short HEAD'.execute().text.trim()}-${Env.config('BUILD_NUMBER', '0')}".toString()
+        project.version = "${baseVersion}-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}-${Env.config('GIT_COMMIT')?.substring(0, 7) ?: 'git rev-parse --short HEAD'.execute().text.trim()}-${Env.config('BUILD_NUMBER', '0')}".toString()
         println "${new Date().format('yy-MM-dd HH:mm:ss')}  kick off build with buildscript version $project.ext.libBuildscriptVersion"
     }
 

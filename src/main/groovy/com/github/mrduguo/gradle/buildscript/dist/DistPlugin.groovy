@@ -15,6 +15,7 @@ class DistPlugin implements Plugin<Project> {
         Env.config('distBintrayKey')
     }
 
+
     @Override
     void apply(Project project) {
         setupProjectRepository()

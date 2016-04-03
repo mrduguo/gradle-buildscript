@@ -105,7 +105,7 @@ class JvmPlugin implements Plugin<Project> {
         project.file('gradle').listFiles().each { File gradleFile ->
             if (gradleFile.isFile()) {
                 def fileText = gradleFile.text
-                IS_SPRING_BOOT_PROJECT = IS_SPRING_BOOT_PROJECT ?: fileText.contains('libSpringBootVersion')
+                IS_SPRING_BOOT_PROJECT = IS_SPRING_BOOT_PROJECT ?: (fileText.contains('libSpringBootVersion') && project.file('src/main').exists())
                 IS_SPRING_FRAMEWORK_PROJECT = IS_SPRING_FRAMEWORK_PROJECT ?: fileText.contains('libSpringFrameworkVersion')
                 IS_GROOVY_PROJECT = IS_GROOVY_PROJECT ?: fileText.contains('libGroovyVersion')
             }

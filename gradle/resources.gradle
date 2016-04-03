@@ -24,7 +24,7 @@ ext {
 }
 
 version = "$projectBaseVersion-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}-$gitCommit-${System.getenv().BUILD_NUMBER?:'0'}".toString()
-
+project.ext.libBuildscriptVersion=version
 
 processResources {
     filesMatching('**/buildscript.*') {
@@ -49,6 +49,15 @@ BUILD_URL=${System.getenv().BUILD_URL}
 BUILD_USER_ID=${System.getenv().BUILD_USER_ID?:System.getenv().BUILD_USER?:System.getProperty('user.name')}
 BUILD_SCRIPT_VERSION=$version\
 """)
+
+    def propertiesToSave=[]
+    project.ext.properties.each{k,v->
+        if(k ==~ /lib.*Version/){
+            propertiesToSave << "$k=$v"
+        }
+    }
+    new File(project.buildDir,'resources/main/com/github/mrduguo/gradle/buildscript/buildscript.properties').write(propertiesToSave.join('\n'))
+
     if(project.file(resourceBasePath+'.gitignore').exists()){
         new File(project.buildDir,'resources/main/buildscript.gitignore').write(project.file(resourceBasePath+'.gitignore').text)
     }
