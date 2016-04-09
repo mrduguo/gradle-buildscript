@@ -22,6 +22,7 @@ class JvmPlugin implements Plugin<Project> {
     public static boolean IS_SPRING_BOOT_PROJECT = false
     public static boolean IS_SPRING_FRAMEWORK_PROJECT = false
     public static boolean IS_GROOVY_PROJECT = false
+    public static boolean IS_CUCUMBER_PROJECT = false
 
     @Override
     void apply(Project project) {
@@ -108,6 +109,7 @@ class JvmPlugin implements Plugin<Project> {
                 IS_SPRING_BOOT_PROJECT = IS_SPRING_BOOT_PROJECT ?: (fileText.contains('libSpringBootVersion') && project.file('src/main').exists())
                 IS_SPRING_FRAMEWORK_PROJECT = IS_SPRING_FRAMEWORK_PROJECT ?: fileText.contains('libSpringFrameworkVersion')
                 IS_GROOVY_PROJECT = IS_GROOVY_PROJECT ?: fileText.contains('libGroovyVersion')
+                IS_CUCUMBER_PROJECT = IS_CUCUMBER_PROJECT ?: fileText.contains('libCucumberVersion')
             }
         }
         if (IS_SPRING_BOOT_PROJECT) {
@@ -126,9 +128,11 @@ class JvmPlugin implements Plugin<Project> {
                         test.systemProperties = System.properties
                         test.testLogging.showStandardStreams = true
                         test.testLogging.exceptionFormat = 'full'
-                        test.testListenerBroadcaster.add(new ClosureBackedMethodInvocationDispatch("beforeTest", { descriptor ->
-                            project.logger.lifecycle("Running $descriptor")
-                        }))
+                        if(!IS_CUCUMBER_PROJECT){
+                            test.testListenerBroadcaster.add(new ClosureBackedMethodInvocationDispatch("beforeTest", { descriptor ->
+                                project.logger.lifecycle("Running $descriptor")
+                            }))
+                        }
                     }
                 })
             }
