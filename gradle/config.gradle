@@ -1,4 +1,4 @@
 configurations {
-    compile.exclude module: 'groovy'
-    compile.exclude module: 'groovy-all'
+    all*.exclude module: 'groovy'
+    all*.exclude module: 'groovy-all'
 }
