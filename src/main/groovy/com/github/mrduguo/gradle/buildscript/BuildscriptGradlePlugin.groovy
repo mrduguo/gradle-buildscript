@@ -38,7 +38,7 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
         }else{
             baseVersion=project.ext.libBuildscriptVersion.split('-').first()
         }
-        project.version = "${baseVersion}-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}-${Env.config('GIT_COMMIT')?.substring(0, 7) ?: 'git rev-parse --short HEAD'.execute().text.trim()}-${Env.config('BUILD_NUMBER', '0')}".toString()
+        project.version = "${baseVersion}-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}-${Env.config('GIT_COMMIT')?.substring(0, 7) ?: 'git rev-parse --short HEAD'.execute().text.trim()}-${Env.config('BUILD_NUMBER') ?: Env.config('TRAVIS_BUILD_NUMBER', '0')}".toString()
         println "${new Date().format('yy-MM-dd HH:mm:ss')}  kick off build with buildscript version $project.ext.libBuildscriptVersion"
     }
 

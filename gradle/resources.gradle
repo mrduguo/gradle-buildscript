@@ -23,7 +23,7 @@ ext {
     }
 }
 
-version = "$projectBaseVersion-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}-$gitCommit-${System.getenv().BUILD_NUMBER?:'0'}".toString()
+version = "$projectBaseVersion-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}-$gitCommit-${System.getenv().BUILD_NUMBER?:System.getenv().TRAVIS_BUILD_NUMBER?:'0'}".toString()
 project.ext.libBuildscriptVersion=version
 
 processResources {

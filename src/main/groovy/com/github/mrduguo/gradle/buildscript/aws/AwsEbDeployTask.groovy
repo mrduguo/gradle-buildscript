@@ -87,7 +87,7 @@ class AwsEbDeployTask extends DefaultTask {
         def existEnv = AwsEbHelper.awsEbDescribeEnv(appName, null, appEnvName)
         if (existEnv) {
             if (Env.config('awsEbOverrideExistsEnv') == 'true') {
-                def tmpEnvName = "${appEnvName}-${Env.config('BUILD_NUMBER') ?: RandomStringUtils.randomAlphanumeric(4).toLowerCase()}"
+                def tmpEnvName = "${appEnvName}-${Env.config('BUILD_NUMBER') ?: Env.config('TRAVIS_BUILD_NUMBER') ?: RandomStringUtils.randomAlphanumeric(4).toLowerCase()}"
                 def newEnv = performCreateEnv(tmpEnvName)
                 AwsEbHelper.awsEbSwapEnvs(newEnv, existEnv)
                 healthCheck(appName, appEnvName)
