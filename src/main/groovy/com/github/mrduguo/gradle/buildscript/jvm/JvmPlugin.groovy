@@ -2,10 +2,10 @@ package com.github.mrduguo.gradle.buildscript.jvm
 
 import com.github.mrduguo.gradle.buildscript.utils.Env
 import com.github.mrduguo.gradle.buildscript.utils.ProjectHelper
+import org.apache.commons.lang.SystemUtils
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.GroovyPlugin
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.bundling.Jar
@@ -128,7 +128,11 @@ class JvmPlugin implements Plugin<Project> {
                         test.systemProperties = System.properties
                         test.testLogging.showStandardStreams = true
                         test.testLogging.exceptionFormat = 'full'
-                        if(!IS_CUCUMBER_PROJECT){
+                        if(IS_CUCUMBER_PROJECT){
+                            if(SystemUtils.IS_OS_WINDOWS){
+                                test.reports.html.enabled=false
+                            }
+                        }else{
                             test.testListenerBroadcaster.add(new ClosureBackedMethodInvocationDispatch("beforeTest", { descriptor ->
                                 project.logger.lifecycle("Running $descriptor")
                             }))
