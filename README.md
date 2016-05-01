@@ -34,4 +34,4 @@ apply plugin: 'com.github.mrduguo.gradle.buildscript'
 ./gradlew
 ```
 
-After the build, it will output the instruction how to use the released build.
+After the build, the output contains the instruction how to use the released build.
