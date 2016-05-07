@@ -29,7 +29,7 @@ class AwsEbDeployTask extends DefaultTask {
     def resolveAppS3ArtifactBaseUrl() {
         appS3ArtifactBaseUrl = Env.config('appS3ArtifactBaseUrl')
         if (!appS3ArtifactBaseUrl) {
-§            appS3ArtifactBaseUrl = "${project.ext.awsS3RepoUrl}${project.group.split('\\.').join('/')}/${Env.artifactId()}"
+            appS3ArtifactBaseUrl = "${project.ext.awsS3RepoUrl}${project.group.split('\\.').join('/')}/${Env.artifactId()}"
         }
     }
 
