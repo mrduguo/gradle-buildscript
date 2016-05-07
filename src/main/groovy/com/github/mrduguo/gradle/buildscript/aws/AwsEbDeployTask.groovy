@@ -29,7 +29,7 @@ class AwsEbDeployTask extends DefaultTask {
     def resolveAppS3ArtifactBaseUrl() {
         appS3ArtifactBaseUrl = Env.config('appS3ArtifactBaseUrl')
         if (!appS3ArtifactBaseUrl) {
-            appS3ArtifactBaseUrl = "${project.ext.awsS3RepoUrl}${Env.config('groupId', 'apps').split('\\\\.').join('/')}/${Env.artifactId()}"
+§            appS3ArtifactBaseUrl = "${project.ext.awsS3RepoUrl}${project.group.split('\\.').join('/')}/${Env.artifactId()}"
         }
     }
 
@@ -43,7 +43,7 @@ class AwsEbDeployTask extends DefaultTask {
     def resolveAppEnvName() {
         appEnvName = Env.config('awsEbAppEnvName')
         if (!appEnvName) {
-            appEnvName = "$appName-${Env.artifactId().split('_').collect { it.substring(0, 1) }.join('')}"
+            appEnvName = "$appName-${Env.artifactId().split(Env.artifactId().contains('_')?'_':'-').collect { it.substring(0, 1) }.join('')}"
         }
     }
 
@@ -52,7 +52,7 @@ class AwsEbDeployTask extends DefaultTask {
         if (!appEnvVersion) {
             def awsEbArtifactVersion = Env.config('awsEbArtifactVersion', 'LATEST')
             if (awsEbArtifactVersion == 'LATEST') {
-                if (ProjectHelper.isTaskExist('publish')) {
+                if (ProjectHelper.isTaskExecuted('publish')) {
                     awsEbArtifactVersion = project.version
                 } else {
                     awsEbArtifactVersion = resolveLatestVersion()

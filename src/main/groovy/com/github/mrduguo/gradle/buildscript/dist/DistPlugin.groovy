@@ -146,7 +146,7 @@ class DistPlugin implements Plugin<Project> {
                                 }
                             }
                         } else {
-                            throw new RuntimeException('gradle 2.9 release does not support the AwsImAuthentication yet')
+                            throw new RuntimeException('cannot find ~/.aws/credentials and gradle release does not support the AwsImAuthentication yet')
 //                    authentication {
 //                        awsIm(AwsImAuthentication)
 //                    }

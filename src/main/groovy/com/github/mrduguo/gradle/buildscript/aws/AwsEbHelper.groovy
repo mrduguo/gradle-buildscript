@@ -37,7 +37,7 @@ class AwsEbHelper {
                 versionLabel: versionLabel,
                 environmentName: envName,
                 cNAMEPrefix: envName,
-                solutionStackName: Env.config('solutionStackName', '64bit Amazon Linux 2015.09 v2.0.8 running Java 8'),
+                solutionStackName: Env.config('solutionStackName', '64bit Amazon Linux 2016.03 v2.1.1 running Java 8'),
         )
         if (customRequest != null) {
             customRequest(createEnvironmentRequest)

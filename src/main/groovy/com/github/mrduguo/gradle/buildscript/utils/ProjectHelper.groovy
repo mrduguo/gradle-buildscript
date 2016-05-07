@@ -36,6 +36,10 @@ class ProjectHelper {
         }
     }
 
+    static def boolean isTaskExecuted(String taskName) {
+        getTask(taskName)?.state.executed
+    }
+
     static def boolean isTaskExist(String taskName) {
         !project.getTasksByName(taskName, false).empty
     }
