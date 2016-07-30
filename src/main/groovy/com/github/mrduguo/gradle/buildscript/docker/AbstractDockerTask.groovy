@@ -6,11 +6,10 @@ import com.github.mrduguo.gradle.buildscript.utils.ProjectHelper
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-class DockerTask extends DefaultTask {
+abstract class AbstractDockerTask extends DefaultTask {
 
     File workingDir
     String dockerTag
-    boolean dockerPush = false
     boolean dockerLatest = true
 
     def cmds
@@ -22,32 +21,14 @@ class DockerTask extends DefaultTask {
     }
 
 
-    def execDockerCommands() {
-        def versionedTag="$dockerTag:${ProjectHelper.project.version}"
-        runDockerCmd("docker build -t $versionedTag .")
-        if(dockerPush){
-            runDockerCmd("docker push $versionedTag")
-        }
-        if(dockerLatest){
-            def latestTag="$dockerTag:latest"
-            runDockerCmd("docker tag $versionedTag $latestTag")
-            if(dockerPush){
-                runDockerCmd("docker push $latestTag")
-            }
-        }
-    }
+    abstract def execDockerCommands()
 
     def initParams() {
+        workingDir = workingDir ?: project.file('build')
         if (Env.config('dockerTag') != null) {
             dockerTag = Env.config('dockerTag')
         } else {
             dockerTag = "${Env.artifactId()}"
-        }
-
-        if (Env.config('dockerPush') != null) {
-            dockerPush = Env.config('dockerPush').toBoolean()
-        } else {
-            dockerPush = Env.jobName() ? true : false
         }
 
         if (Env.config('dockerLatest') != null) {

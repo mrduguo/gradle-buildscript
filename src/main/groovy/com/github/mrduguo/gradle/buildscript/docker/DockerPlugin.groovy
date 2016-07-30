@@ -1,5 +1,7 @@
 package com.github.mrduguo.gradle.buildscript.docker
 
+import com.github.mrduguo.gradle.buildscript.dist.DistPlugin
+import com.github.mrduguo.gradle.buildscript.utils.Env
 import com.github.mrduguo.gradle.buildscript.utils.ProjectHelper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,31 +16,57 @@ class DockerPlugin implements Plugin<Project> {
     void apply(Project project) {
         IS_DOCKER_PROJECT = project.file('src/main/docker/Dockerfile').exists()
         if (IS_DOCKER_PROJECT) {
-
             if (project.getTasksByName('assemble', true).empty) {
                 project.getPlugins().apply(BasePlugin)
             }
 
+            def dockerBuildTask = setupBuildTask(project)
+            setupResourceTask(project,dockerBuildTask)
+            setupPushTask(project, dockerBuildTask)
+        }
+    }
 
+    def setupBuildTask(Project project) {
+        def dockerBuildTask = project.getTasks().create('dockerBuild', DockerBuildTask.class)
+        dockerBuildTask.workingDir = project.file('build')
+        project.getTasks().getByName('assemble').dependsOn(dockerBuildTask)
+        dockerBuildTask
+    }
 
-            def dockerTask = project.getTasks().create('docker', DockerTask.class)
-            dockerTask.workingDir = project.file('build')
-            project.getTasks().getByName('assemble').dependsOn(dockerTask)
+    void setupResourceTask(Project project,def dockerBuildTask) {
+        def processResourceTask = project.getTasks().create('dockerResources', ProcessResources.class)
+        processResourceTask.from(project.file('src/main/docker'))
+        processResourceTask.expand(project.properties)
+        processResourceTask.destinationDir(project.file('build'))
+        dockerBuildTask.dependsOn(processResourceTask)
 
-            def processResourceTask = project.getTasks().create('dockerResources', ProcessResources.class)
-            processResourceTask.from(project.file('src/main/docker'))
-            processResourceTask.expand(project.properties)
-            processResourceTask.destinationDir(project.file('build'))
-            dockerTask.dependsOn(processResourceTask)
+        ProjectHelper.doIfTaskExist('test') { def testTask ->
+            dockerBuildTask.dependsOn(testTask)
+        }
 
-            ProjectHelper.doIfTaskExist('test') { def testTask ->
-                dockerTask.dependsOn(testTask)
-            }
+        if (ProjectHelper.isTaskExist('bootRepackage')) {
+            processResourceTask.dependsOn(project.getTasks().getByName('bootRepackage'))
+        } else if (ProjectHelper.isTaskExist('jar')) {
+            processResourceTask.dependsOn(project.getTasks().getByName('jar'))
+        }
+    }
 
-            if(ProjectHelper.isTaskExist('bootRepackage')){
-                processResourceTask.dependsOn(project.getTasks().getByName('bootRepackage'))
-            }else if(ProjectHelper.isTaskExist('jar')){
-                processResourceTask.dependsOn(project.getTasks().getByName('jar'))
+    void setupPushTask(Project project, def dockerBuildTask) {
+        def dockerPush
+        if (Env.config('dockerPush')) {
+            dockerPush = Env.config('dockerPush').toBoolean()
+        } else {
+            dockerPush = Env.jobName() ? true : false
+        }
+
+        if (dockerPush) {
+            def dockerPushTask = project.getTasks().create('dockerPush', DockerPushTask.class)
+            dockerPushTask.dependsOn(dockerBuildTask)
+            project.afterEvaluate {
+                if (ProjectHelper.isTaskExist('check')) {
+                    dockerPushTask.dependsOn ProjectHelper.getTask('check')
+                }
+                ProjectHelper.getTask('build').dependsOn dockerPushTask
             }
         }
     }

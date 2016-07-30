@@ -7,7 +7,7 @@ class BldUpgradeTaskTest extends AbstractGradlewTest {
 
     def void testRunTask() {
         prepareGradleProject()
-        runGradlewBuild("bld_upgrade -DgradleVersion=${Env.config('gradleVersion','latest')} -DtargetProjectRoot=${Env.config('targetProjectRoot','build/test-root')}")
+        runGradlewBuild("bld_upgrade -DtargetProjectRoot=${Env.config('targetProjectRoot','build/test-root')}")
     }
 
 }
