@@ -2,7 +2,7 @@ def isRootProject=file('gradle.properties').exists()
 def resourceBasePath=isRootProject?'':'../'
 
 ext {
-    mavenRepoUrl = System.properties.mavenRepoUrl ?: (System.properties.JOB_NAME?:System.getenv().JOB_NAME) ? 'https://dl.bintray.com/mrduguo/maven/' : "file://$rootProject.projectDir/build/repo/".toString()
+    mavenRepoUrl = System.properties.mavenRepoUrl ?: (System.properties.JOB_NAME?:System.getenv().JOB_NAME) ? 'https://dl.bintray.com/mrduguo/maven/' : "file://${rootProject.projectDir.absolutePath.replaceAll('\\\\','/')}/build/repo/".toString()
     gitBranch=System.properties.GIT_BRANCH ?: System.getenv().GIT_BRANCH ?: 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
     gitCommit=System.getenv().GIT_COMMIT?.substring(0,7) ?: 'git rev-parse --short HEAD'.execute().text.trim()
 
@@ -52,7 +52,7 @@ BUILD_SCRIPT_VERSION=$version\
 
     def propertiesToSave=[]
     project.ext.properties.each{k,v->
-        if(k ==~ /lib.*Version/){
+        if(!(k in ['groupId','baseVersion','gitBranch','gitCommit','mavenRepoUrl','projectBaseVersion','','',''])){
             propertiesToSave << "$k=$v"
         }
     }

@@ -1,5 +1,8 @@
 package com.github.mrduguo.gradle.buildscript.utils
 
+import org.apache.commons.lang.SystemUtils
+import org.codehaus.plexus.util.Os
+
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -73,11 +76,13 @@ class ProcessRunner {
     def initCmd() {
         def cmdFile
         if (cmds) {
-            cmdFile = File.createTempFile('cmd-', '.sh')
+            cmdFile = File.createTempFile('cmd-', SystemUtils.IS_OS_WINDOWS?'.bat':'.sh')
             cmdFile.write(cmds.join('\n'))
-            cmd = "bash $cmdFile.absolutePath"
+            cmd = "${SystemUtils.IS_OS_WINDOWS?'cmd /c':'bash'} $cmdFile.absolutePath"
             cmdFile
-            println("executing commands: $cmd\n${cmdFile.text}\n\n")
+            if(logOutput){
+                println("executing commands: $cmd\n${cmdFile.text}\n\n")
+            }
         } else {
             logCommand()
         }
@@ -85,7 +90,9 @@ class ProcessRunner {
     }
 
     def logCommand() {
-        println("executing command: $cmd")
+        if(logOutput){
+            println("executing command: $cmd")
+        }
     }
 
     def logLine(String source, String line) {

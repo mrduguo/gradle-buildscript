@@ -19,6 +19,10 @@ class Env {
         config('JOB_NAME', defaultName)
     }
 
+    public static boolean isGitProject() {
+        ProjectHelper.project.file('.git').exists() || config('GIT_BRANCH')!=null
+    }
+
     public static String artifactId() {
         def name = config('artifactId')
         if (!name) {

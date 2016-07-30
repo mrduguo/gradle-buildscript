@@ -84,6 +84,11 @@ class DistPlugin implements Plugin<Project> {
                     ProjectHelper.doIfTaskExist('sourcesJar'){def sourcesJar->
                         artifact sourcesJar
                     }
+                    if(project.file('src/main/resources/META-INF/gradle-plugins/com.github.mrduguo.gradle.buildscript.properties').exists()){
+                        artifact('build/resources/main/com/github/mrduguo/gradle/buildscript/buildscript.gradle') {
+                            classifier 'buildscript'
+                        }
+                    }
                 }
             }
         }

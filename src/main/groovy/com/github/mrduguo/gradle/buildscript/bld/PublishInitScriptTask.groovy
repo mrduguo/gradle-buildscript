@@ -12,9 +12,7 @@ class PublishInitScriptTask extends DefaultTask {
         publishFile(project.file('build/resources/main/com/github/mrduguo/gradle/buildscript/buildscript.gradle'), 'com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle')
         println """Usage:
 
-        ./gradlew -DmavenRepoUrl=$project.ext.mavenRepoUrl
-
-        ./gradlew -DmavenRepoUrl=$project.ext.mavenRepoUrl -DbuildscriptVersion=$project.version
+        ./gradlew -DbuildscriptUrl=${project.ext.mavenRepoUrl}com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle -DbuildscriptVersion=$project.version
 
 """
     }

@@ -2,6 +2,7 @@ package com.github.mrduguo.gradle.buildscript
 
 import com.github.mrduguo.gradle.buildscript.bld.BldProjectPlugin
 import com.github.mrduguo.gradle.buildscript.dist.DistPlugin
+import com.github.mrduguo.gradle.buildscript.docker.DockerPlugin
 import com.github.mrduguo.gradle.buildscript.jvm.JvmPlugin
 import com.github.mrduguo.gradle.buildscript.nodejs.NodejsPlugin
 import com.github.mrduguo.gradle.buildscript.utils.Env
@@ -30,7 +31,9 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
         Properties pro = new Properties()
         pro.load(getClass().getResourceAsStream('/com/github/mrduguo/gradle/buildscript/buildscript.properties'))
         pro.each { k, v ->
-            project.ext.set(k, v)
+            if(!project.hasProperty(k)){
+                project.ext.set(k, v)
+            }
         }
         def baseVersion
         if(project.hasProperty('baseVersion')){
@@ -38,7 +41,10 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
         }else{
             baseVersion=project.ext.libBuildscriptVersion.split('-').first()
         }
-        project.version = "${baseVersion}-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}-${Env.config('GIT_COMMIT')?.substring(0, 7) ?: 'git rev-parse --short HEAD'.execute().text.trim()}-${Env.config('BUILD_NUMBER') ?: Env.config('TRAVIS_BUILD_NUMBER', '0')}".toString()
+        project.version = "${baseVersion}-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}".toString()
+        if(Env.isGitProject()){
+            project.version = "${project.version}-${Env.config('GIT_COMMIT')?.substring(0, 7) ?: 'git rev-parse --short HEAD'.execute().text.trim()}-${Env.config('BUILD_NUMBER') ?: Env.config('TRAVIS_BUILD_NUMBER', '0')}".toString()
+        }
         println "${new Date().format('yy-MM-dd HH:mm:ss')}  kick off build with buildscript version $project.ext.libBuildscriptVersion"
     }
 
@@ -46,6 +52,7 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
         project.plugins.apply(DistPlugin)
         project.plugins.apply(JvmPlugin)
         project.plugins.apply(NodejsPlugin)
+        project.plugins.apply(DockerPlugin)
     }
 
 

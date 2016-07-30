@@ -22,14 +22,19 @@ class JvmPlugin implements Plugin<Project> {
     public static boolean IS_SPRING_BOOT_PROJECT = false
     public static boolean IS_SPRING_FRAMEWORK_PROJECT = false
     public static boolean IS_GROOVY_PROJECT = false
+    public static boolean IS_JAVA_PROJECT = false
     public static boolean IS_CUCUMBER_PROJECT = false
 
     @Override
     void apply(Project project) {
         detectProjectType(project)
 
-        if (IS_GROOVY_PROJECT) {
-            project.getPlugins().apply(GroovyPlugin)
+        if (IS_JAVA_PROJECT || IS_GROOVY_PROJECT) {
+            if (IS_GROOVY_PROJECT){
+                project.getPlugins().apply(GroovyPlugin)
+            }else{
+                project.getPlugins().apply(JavaPlugin)
+            }
             setupLibVersions(project)
             project.getTasks().getByName(JavaPlugin.JAR_TASK_NAME).setArchiveName(Env.artifactId() + "-" + project.version + ".jar")
 
@@ -52,8 +57,8 @@ class JvmPlugin implements Plugin<Project> {
                 ProjectHelper.doIfTaskExist('jar') {def jarTask->
                     jarTask.setArchiveName(Env.artifactId() + "-" + project.version + ".jar")
                 }
-                project.sourceCompatibility = '1.7'
-                project.targetCompatibility = '1.7'
+                project.sourceCompatibility = Env.config('javaCompatibility','1.7')
+                project.targetCompatibility = Env.config('javaCompatibility','1.7')
 
                 //TODO to verify in gradle-sample-app project
                 project.configurations.compile.resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
@@ -88,7 +93,7 @@ class JvmPlugin implements Plugin<Project> {
             project.sourceSets.main.java.source.each {
                 sourcesJarTask.from(it)
             }
-            project.sourceSets.main.groovy.source.each {
+            project.sourceSets.main.groovy?.source.each {
                 sourcesJarTask.from(it)
             }
             project.getTasks().getByName('assemble').dependsOn(sourcesJarTask)
@@ -117,6 +122,9 @@ class JvmPlugin implements Plugin<Project> {
         }
         if (IS_SPRING_FRAMEWORK_PROJECT) {
             IS_GROOVY_PROJECT = true
+        }
+        if(project.file('src/main/java').exists()){
+            IS_JAVA_PROJECT=true
         }
     }
 
