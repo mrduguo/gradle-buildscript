@@ -7,7 +7,7 @@ class RunGradleBuildTest extends AbstractGradlewTest {
 
     def void testRun() {
         prepareGradleProject()
-        if(Env.config('JOB_NAME')){
+        if(Env.jobName()){
             runGradlewBuild('check')
         }else{
             runGradlewBuild(System.properties.testBuildParams ?: '')

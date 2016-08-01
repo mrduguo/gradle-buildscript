@@ -109,7 +109,7 @@ class DistPlugin implements Plugin<Project> {
             }
             if (localRepoUrl) {
                 mavenReleaseRepoUrl = localRepoUrl
-            } else if (s3RepoUrl && Env.config('JOB_NAME')) {
+            } else if (s3RepoUrl && Env.jobName()) {
                 mavenReleaseRepoUrl = s3RepoUrl
             } else {
                 mavenReleaseRepoUrl = "file://${project.file('build/repo')}"

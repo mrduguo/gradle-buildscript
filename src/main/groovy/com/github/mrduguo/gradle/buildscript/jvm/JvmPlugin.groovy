@@ -1,5 +1,6 @@
 package com.github.mrduguo.gradle.buildscript.jvm
 
+import com.github.mrduguo.gradle.buildscript.bld.PublishInitScriptTask
 import com.github.mrduguo.gradle.buildscript.utils.Env
 import com.github.mrduguo.gradle.buildscript.utils.ProjectHelper
 import org.apache.commons.lang.SystemUtils
@@ -40,6 +41,9 @@ class JvmPlugin implements Plugin<Project> {
 
             if (IS_SPRING_BOOT_PROJECT) {
                 project.getPlugins().apply(SpringBootPlugin)
+                def springBootGenerateBuildInfo = project.getTasks().create('springBootGenerateBuildInfo', SpringBootGenerateBuildInfoTask.class)
+                springBootGenerateBuildInfo.dependsOn project.getTasks().getByName(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
+                project.getTasks().getByName(JavaPlugin.CLASSES_TASK_NAME).dependsOn springBootGenerateBuildInfo
             }
         }
 

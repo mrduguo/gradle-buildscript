@@ -10,7 +10,8 @@ abstract class AbstractDockerTask extends DefaultTask {
 
     File workingDir
     String dockerTag
-    boolean dockerLatest = true
+    boolean dockerEnableBaseVersion = true
+    boolean dockerEnableLatest = true
 
     def cmds
 
@@ -31,8 +32,12 @@ abstract class AbstractDockerTask extends DefaultTask {
             dockerTag = "${Env.artifactId()}"
         }
 
-        if (Env.config('dockerLatest') != null) {
-            dockerLatest = Env.config('dockerLatest').toBoolean()
+        if (Env.config('dockerEnableLatest') != null) {
+            dockerEnableLatest = Env.config('dockerEnableLatest').toBoolean()
+        }
+
+        if (Env.config('dockerEnableBaseVersion') != null) {
+            dockerEnableBaseVersion = Env.config('dockerEnableBaseVersion').toBoolean()
         }
     }
 

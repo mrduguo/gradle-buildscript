@@ -1,1 +1,1 @@
-script: JOB_NAME=CI ./gradlew
+script: ./gradlew

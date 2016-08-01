@@ -35,17 +35,16 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
                 project.ext.set(k, v)
             }
         }
-        def baseVersion
-        if(project.hasProperty('baseVersion')){
-            baseVersion=project.baseVersion
-        }else{
-            baseVersion=project.ext.libBuildscriptVersion.split('-').first()
+        if(!Env.config('baseVersion')){
+            project.ext.set('baseVersion', project.libBuildscriptVersion.split('-').first())
         }
-        project.version = "${baseVersion}-${new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime()).format('yyMMdd-HHmmss')}".toString()
-        if(Env.isGitProject()){
-            project.version = "${project.version}-${Env.config('GIT_COMMIT')?.substring(0, 7) ?: 'git rev-parse --short HEAD'.execute().text.trim()}-${Env.config('BUILD_NUMBER') ?: Env.config('TRAVIS_BUILD_NUMBER', '0')}".toString()
+        def jvmStartTime=new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime())
+        project.version = "${Env.config('baseVersion')}-${jvmStartTime.format('yyMMdd-HHmmss')}".toString()
+        def gitInfo=Env.gitInfo()
+        if(gitInfo){
+            project.version = "${project.version}-${gitInfo.commit}-${gitInfo.buildNumber}".toString()
         }
-        println "${new Date().format('yy-MM-dd HH:mm:ss')}  kick off build with buildscript version $project.ext.libBuildscriptVersion"
+        println "${jvmStartTime.format('yy-MM-dd HH:mm:ss')}  kick off build with buildscript version $project.libBuildscriptVersion"
     }
 
     def activeProjectLanguageSupport(Project project) {
@@ -63,7 +62,7 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
         if (taskNames) {
             tryToRegisterTasks(project, taskNames, false)
         } else {
-            def jobName = Env.config('JOB_NAME')
+            def jobName = Env.jobName()
             if (jobName) {
                 taskNames = jobName.split('-')
                 tryToRegisterTasks(project, taskNames, true)
