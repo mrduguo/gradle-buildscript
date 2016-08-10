@@ -18,6 +18,7 @@ apply plugin: 'com.github.mrduguo.gradle.buildscript'
 * [gradle-simplest-project](https://github.com/mrduguo/gradle-simplest-project) - a simplest gradle build project
 * [gradle-sample-lib](https://github.com/mrduguo/gradle-sample-lib) - a demo for lib project
 * [gradle-sample-app](https://github.com/mrduguo/gradle-sample-app) - a demo for spring boot based app project
+* [gradle-sample-react](https://github.com/mrduguo/gradle-sample-react) - a demo for react + spring boot based app
 * [gradle-sample-cucumber](https://github.com/mrduguo/gradle-sample-cucumber) - a demo for cucumber groovy based integration test
 
 
