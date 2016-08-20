@@ -36,7 +36,7 @@ apply plugin: 'com.github.mrduguo.gradle.buildscript'
 ./gradlew
 ```
 
-All projects, include the this project itself, will do the full build by default. 
+All projects, include this project itself, will do the full build by default. 
 It will do as much as close to jenkins integration build.
 
 #### Run Locally
