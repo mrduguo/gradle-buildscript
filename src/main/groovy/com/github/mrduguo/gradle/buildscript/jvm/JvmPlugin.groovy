@@ -1,6 +1,5 @@
 package com.github.mrduguo.gradle.buildscript.jvm
 
-import com.github.mrduguo.gradle.buildscript.bld.PublishInitScriptTask
 import com.github.mrduguo.gradle.buildscript.utils.Env
 import com.github.mrduguo.gradle.buildscript.utils.ProjectHelper
 import org.apache.commons.lang.SystemUtils
@@ -71,7 +70,7 @@ class JvmPlugin implements Plugin<Project> {
         }
 
         project.gradle.startParameter?.taskNames.each {
-            if (it == 'run') {
+            if (it == 'run' && IS_SPRING_BOOT_PROJECT) {
                 def fakeBootRunTask = project.getTasks().create('run', FakeBootRunTask.class)
                 fakeBootRunTask.dependsOn(ProjectHelper.getTask('bootRun'))
             }
