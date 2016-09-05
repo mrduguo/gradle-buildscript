@@ -41,7 +41,15 @@ class NpmTask extends DefaultTask {
     def generateCmds() {
         cmds = []
         def packageJson = new Gson().fromJson(packageJsonFile.text, Map)
-        if(!Os.isFamily(Os.FAMILY_WINDOWS)){
+        if(Os.isFamily(Os.FAMILY_WINDOWS)){
+            // have to run npm command once a time as it exit the process after each command
+            cmds << "cd $workingDir.absolutePath"
+            cmds << "npm install"
+            runNpm()
+
+            cmds = []
+            cmds << "cd $workingDir.absolutePath"
+        }else{
             def nodeVersion = detectNodeVersion(packageJson)
             def nvmFile = new File(System.getProperty('user.home'), '.nvm/nvm.sh')
             if (!nvmFile.exists()) {
@@ -49,9 +57,9 @@ class NpmTask extends DefaultTask {
             }
             cmds << '. ~/.nvm/nvm.sh'
             cmds << "nvm install $nodeVersion\n"
+            cmds << "cd $workingDir.absolutePath"
+            cmds << "npm install"
         }
-        cmds << "cd $workingDir.absolutePath"
-        cmds << "npm install"
 
         if (npmCmds) {
             npmCmds.each {
