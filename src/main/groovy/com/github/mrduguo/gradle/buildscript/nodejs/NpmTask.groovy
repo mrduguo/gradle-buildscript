@@ -69,8 +69,12 @@ class NpmTask extends DefaultTask {
 
         if (!npmRunCmd) {
             npmRunCmd = Env.config('npmRunCmd')
-            if (!npmRunCmd) {
-                npmRunCmd = packageJson.scripts?.keySet().first()
+            if (!npmRunCmd) {[:].containsKey('build')
+                if(packageJson.scripts?.containsKey('build'){
+                    npmRunCmd='build'
+                }else{
+                    npmRunCmd = packageJson.scripts?.keySet().first()
+                }
             }
         }
         if (npmRunCmd) {
