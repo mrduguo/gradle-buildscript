@@ -1,0 +1,11 @@
+{
+  "engines": {
+    "node": "6.5.0"
+  },
+  "scripts": {
+    "build": "node src/index.js"
+  },
+  "dependencies": {
+    "hello-world-module": "^1.0.1"
+  }
+}
