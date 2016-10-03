@@ -79,8 +79,11 @@ class NpmTask extends DefaultTask {
             cmds << "npm install"
             runNpm()
             installedPackageJsonFile << packageJsonFileText
+        }else{
+            println "node_modules is up to date, skipping install"
         }
         if (node_modules_override.exists()) {
+            println "apply override from $node_modules_override.absolutePath"
             FileUtils.copyDirectory(node_modules_override, node_modules)
         }
     }
