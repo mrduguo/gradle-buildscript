@@ -13,6 +13,19 @@ apply plugin: 'com.github.mrduguo.gradle.buildscript'
 
 
 
+### Documentations
+
+#### npm
+
+A `package.json` or `src/main/webapp/package.json` file will active the npm project support:
+
+1. automatically install nodejs version based on `package.json@engines.node` with [nvm](https://github.com/creationix/nvm) (except Windows)
+2. manage `node_modules` life cycle
+  1. delete the folder and run `npm install` if anything change from `package.json`
+  2. apply override from `config/override/node_modules` if exist
+3. execute `npm run build` with default build command `./gradlew`
+4. execute `npm run run` with when execute `./gradlew run`
+
 ### Sample Projects
 
 * [gradle-simplest-project](https://github.com/mrduguo/gradle-simplest-project) - simplest project only contain build system
