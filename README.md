@@ -13,9 +13,9 @@ apply plugin: 'com.github.mrduguo.gradle.buildscript'
 
 
 
-### Documentations
+### Usage
 
-#### npm project support
+#### npm project
 
 A `package.json` or `src/main/webapp/package.json` file will active the npm project support:
 
