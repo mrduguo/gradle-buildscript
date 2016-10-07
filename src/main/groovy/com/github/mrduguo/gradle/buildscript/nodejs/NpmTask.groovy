@@ -69,7 +69,7 @@ class NpmTask extends DefaultTask {
 
     def prepareNodeModulesFolder(String packageJsonFileText, def packageJson) {
         def node_modules = new File(packageJsonFile.parentFile, 'node_modules')
-        def node_modules_override = new File(packageJsonFile.parentFile, 'node_modules-override')
+        def node_modules_override = new File(packageJsonFile.parentFile, 'config/override/node_modules')
         def installedPackageJsonFile = new File(node_modules, 'package.json')
         if (!installedPackageJsonFile.exists() || installedPackageJsonFile.text != packageJsonFileText) {
             if (node_modules.exists()) {
