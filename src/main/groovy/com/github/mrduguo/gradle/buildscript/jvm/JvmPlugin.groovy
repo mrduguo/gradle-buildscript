@@ -96,8 +96,10 @@ class JvmPlugin implements Plugin<Project> {
             project.sourceSets.main.java.source.each {
                 sourcesJarTask.from(it)
             }
-            project.sourceSets.main.groovy?.source.each {
-                sourcesJarTask.from(it)
+            if(project.sourceSets.main.hasProperty('groovy')){
+                project.sourceSets.main.groovy.source.each {
+                    sourcesJarTask.from(it)
+                }
             }
             project.getTasks().getByName('assemble').dependsOn(sourcesJarTask)
         }
