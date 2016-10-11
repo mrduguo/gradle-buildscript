@@ -24,10 +24,10 @@ class NodejsPlugin implements Plugin<Project> {
                     if (it.startsWith('npm_run_')) {
                         npmRunCmd = it.split('_', 3).last()
                     } else {
-                        npmRunCmd = 'run'
+                        npmRunCmd = 'start'
                     }
                 } else if (it == 'run') {
-                    npmRunCmd = 'run'
+                    npmRunCmd = 'start'
                     if (ProjectHelper.isTaskExist('run')) {
                         runInBackground = true
                     }
