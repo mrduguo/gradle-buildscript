@@ -46,7 +46,7 @@ class NodejsPlugin implements Plugin<Project> {
                 project.getTasks().getByName('assemble').dependsOn(npmTask)
             }
 
-            if (npmRunCmd == 'run') {
+            if (npmRunCmd == 'start') {
                 ProjectHelper.safeGetRunTask().dependsOn(npmTask)
             }
 
