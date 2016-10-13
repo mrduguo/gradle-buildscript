@@ -8,6 +8,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.GroovyPlugin
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.scala.ScalaPlugin
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.testing.Test
 import org.gradle.listener.ClosureBackedMethodInvocationDispatch
@@ -23,15 +24,18 @@ class JvmPlugin implements Plugin<Project> {
     public static boolean IS_SPRING_FRAMEWORK_PROJECT = false
     public static boolean IS_GROOVY_PROJECT = false
     public static boolean IS_JAVA_PROJECT = false
+    public static boolean IS_SCALA_PROJECT = false
     public static boolean IS_CUCUMBER_PROJECT = false
 
     @Override
     void apply(Project project) {
         detectProjectType(project)
 
-        if (IS_JAVA_PROJECT || IS_GROOVY_PROJECT) {
+        if (IS_SCALA_PROJECT || IS_JAVA_PROJECT || IS_GROOVY_PROJECT) {
             if (IS_GROOVY_PROJECT){
                 project.getPlugins().apply(GroovyPlugin)
+            }else if (IS_SCALA_PROJECT){
+                project.getPlugins().apply(ScalaPlugin)
             }else{
                 project.getPlugins().apply(JavaPlugin)
             }
@@ -130,6 +134,9 @@ class JvmPlugin implements Plugin<Project> {
         }
         if(project.file('src/main/java').exists()){
             IS_JAVA_PROJECT=true
+        }
+        if(project.file('src/main/scala').exists()){
+            IS_SCALA_PROJECT=true
         }
     }
 
