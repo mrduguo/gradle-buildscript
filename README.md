@@ -32,7 +32,7 @@ A `package.json` or `src/main/webapp/package.json` file will active the npm proj
 * [gradle-simplest-project](https://github.com/mrduguo/gradle-simplest-project) - simplest project only contain build system
 * [gradle-sample-lib](https://github.com/mrduguo/gradle-sample-lib) - library project which publish jar file
 * [gradle-sample-app](https://github.com/mrduguo/gradle-sample-app) - spring boot based app come with zone down time AWS deployment work flow
-* [gradle-sample-app](https://github.com/mrduguo/gradle-sample-cmd) - spring boot based command line app with docker support
+* [gradle-sample-cmd](https://github.com/mrduguo/gradle-sample-cmd) - spring boot based command line app with docker support
 * [gradle-sample-react](https://github.com/mrduguo/gradle-sample-react) - react (UI) + spring boot (REST API)
 * [gradle-sample-cucumber](https://github.com/mrduguo/gradle-sample-cucumber) - cucumber groovy based integration test
 
