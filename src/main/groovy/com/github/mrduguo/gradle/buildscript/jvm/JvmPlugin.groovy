@@ -14,7 +14,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.listener.ClosureBackedMethodInvocationDispatch
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
 import org.gradle.plugins.ide.idea.IdeaPlugin
-import org.springframework.boot.gradle.SpringBootPlugin
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 import java.util.regex.Pattern
 
