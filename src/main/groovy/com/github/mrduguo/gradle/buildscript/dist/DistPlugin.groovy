@@ -167,18 +167,17 @@ class DistPlugin implements Plugin<Project> {
     }
 
     def void enableBintrayDist(Project project) {
-        def (defaultUser,defaultRepo)=parseBintrayUserAndRepo(project)
         def bintrayExtension = project.extensions.findByName('bintray')
         def distBintrayPackage = Env.config('distBintrayPackage', "${Env.artifactId()}")
-        def userName = Env.config('distBintrayUser', defaultUser)
-        def orgName = Env.config('distBintrayOrg', userName)
+        def userName = Env.config('distBintrayUser')
+        def orgName = Env.config('distBintrayOrg')
         bintrayExtension.with {
             user = userName
             key = Env.config('distBintrayKey')
             publications = ['maven']
             publish = true
             pkg {
-                repo = Env.config('distBintrayRepo',defaultRepo)
+                repo = Env.config('distBintrayRepo')
                 name = distBintrayPackage
                 userOrg = orgName
                 licenses = ['Apache-2.0']
@@ -191,18 +190,7 @@ class DistPlugin implements Plugin<Project> {
         bintrayUpload.dependsOn ProjectHelper.getTask('check')
     }
 
-    def parseBintrayUserAndRepo(Project project) {
-        def user,repoName
-        project.buildscript.repositories.each { def repo ->
-            def repoUrl = repo.url.toString()
-            if (repoUrl.startsWith('https://dl.bintray.com/')) {
-                def repoInfo=repoUrl.split('/')
-                user=repoInfo[-2]
-                repoName=repoInfo[-1]
-            }
-        }
-        [user,repoName]
-    }
+
     def detectGroupIdBasedSource(Project project) {
         def rootFolder = findProjectRootFolder(project.file('src/main/groovy'),0)
         if (rootFolder == null) {

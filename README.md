@@ -6,7 +6,7 @@ A build system inspired by [spring boot auto configure](https://docs.spring.io/s
 
 ```
 buildscript {
-    apply from: System.properties.buildscriptUrl ?: System.getenv().buildscriptUrl ?: project.hasProperty('buildscriptUrl') ? project.ext.buildscriptUrl : 'https://dl.bintray.com/mrduguo/maven/com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle'
+    apply from: System.properties.buildscriptUrl ?: System.getenv().buildscriptUrl ?: project.hasProperty('buildscriptUrl') ? project.ext.buildscriptUrl : 'https://jcenter.bintray.com/com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle'
 }
 apply plugin: 'com.github.mrduguo.gradle.buildscript'
 ```
