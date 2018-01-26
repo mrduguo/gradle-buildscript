@@ -7,7 +7,7 @@ A build system inspired by [spring boot auto configure](https://docs.spring.io/s
 ```
 buildscript {
     ext.config = { key, defaultValue = null -> System.properties[key] ?: System.getenv()[key] ?: project.hasProperty(key) ? project.ext[key] : defaultValue }
-    apply from: config('buildscriptUrl') ?: "${config('mavenRepoUrl', 'https://dl.bintray.com/mrduguo/maven/')}com/github/mrduguo/gradle/gradle-buildscript/${config('buildscriptVersion') ? "/${config('buildscriptVersion')}/gradle-buildscript-${config('buildscriptVersion')}-buildscript.gradle" : 'buildscript.gradle'}"
+    apply from: config('buildscriptUrl') ?: "${config('mavenRepoUrl', 'https://jcenter.bintray.com/')}com/github/mrduguo/gradle/gradle-buildscript/${config('buildscriptVersion') ? "${config('buildscriptVersion')}/gradle-buildscript-${config('buildscriptVersion')}-buildscript.gradle" : 'buildscript.gradle'}"
 }
 apply plugin: 'com.github.mrduguo.gradle.buildscript'
 ```
