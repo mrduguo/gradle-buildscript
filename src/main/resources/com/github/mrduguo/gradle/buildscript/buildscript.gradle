@@ -1,25 +1,27 @@
+ext.config = { key, defaultValue = null -> System.properties[key] ?: System.getenv()[key] ?: project.hasProperty(key) ? project.ext[key] : defaultValue }
+
 project.buildscript{
     repositories {
         jcenter()
         maven {
             url '@mavenRepoUrl@'
         }
-        if(System.properties.additionalMavenRpoUrl || '@mavenRepoUrl@'.startsWith('file')){
+        if(config('additionalMavenRpoUrl') || '@mavenRepoUrl@'.startsWith('file')){
             maven {
-                url System.properties.additionalMavenRpoUrl ?: 'https://dl.bintray.com/mrduguo/maven/'
+                url config('additionalMavenRpoUrl') ?: 'https://dl.bintray.com/mrduguo/maven/'
             }
         }
     }
     dependencies {
-        def versionRange=System.properties.buildscriptVersion
+        def versionRange=config('buildscriptVersion')
         if(!versionRange){
             versionRange='+'
             try{
-                def gitBranch=System.properties.branchName ?:System.properties.GIT_BRANCH ?:System.getenv().GIT_BRANCH ?: 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+                def gitBranch=config('branchName') ?: config('GIT_BRANCH') ?: 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
                 def matcher = gitBranch =~ /\/(\d+)\.(\d+)\.(\d+)/
                 if(!matcher.find()) {
                     matcher=null
-                    def jobName=System.properties.JOB_NAME ?: System.getenv().JOB_NAME
+                    def jobName=config('JOB_NAME')
                     if(jobName){
                         def envNameSection=jobName.split('-').first()
                         matcher = envNameSection =~ /(\d)(\d\d)(\d\d)/
