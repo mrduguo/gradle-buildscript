@@ -4,9 +4,23 @@ A build system inspired by [spring boot auto configure](https://docs.spring.io/s
 
 ### Your Project build.gradle To Use The Build System
 
+
+#### latest
+
 ```
 buildscript {
     apply from: System.properties.buildscriptUrl ?: System.getenv().buildscriptUrl ?: project.hasProperty('buildscriptUrl') ? project.ext.buildscriptUrl : 'https://jcenter.bintray.com/com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle'
+}
+apply plugin: 'com.github.mrduguo.gradle.buildscript'
+```
+
+
+#### released version
+
+```
+buildscript {
+    System.properties.buildscriptVersion='0.3.0-161110-230541-d12d447-43'
+    apply from: System.properties.buildscriptUrl ?: System.getenv().buildscriptUrl ?: project.hasProperty('buildscriptUrl') ? project.ext.buildscriptUrl : "${System.properties.mavenRepoUrl ?: 'https://dl.bintray.com/mrduguo/maven/'}com/github/mrduguo/gradle/gradle-buildscript/${System.properties.buildscriptVersion}/gradle-buildscript-${System.properties.buildscriptVersion}-buildscript.gradle"
 }
 apply plugin: 'com.github.mrduguo.gradle.buildscript'
 ```
