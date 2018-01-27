@@ -17,15 +17,15 @@ apply plugin: 'com.github.mrduguo.gradle.buildscript'
 Set the `buildscriptVersion` variable via 
 * system properties
 ```
--DbuildscriptVersion=0.3.0-180126-112315-01116ae-46
+-DbuildscriptVersion=0.3.0-180126-113820-29d4090-50
 ```
 * envrionment variables
 ```
-export buildscriptVersion=0.3.0-180126-112315-01116ae-46
+export buildscriptVersion=0.3.0-180126-113820-29d4090-50
 ```
 * gradle.properties
 ```
-buildscriptVersion=0.3.0-180126-112315-01116ae-46
+buildscriptVersion=0.3.0-180126-113820-29d4090-50
 ```
 
 
