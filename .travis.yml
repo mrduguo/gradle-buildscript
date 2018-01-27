@@ -1,1 +1,6 @@
 script: ./gradlew
+
+branches:
+  only:
+  - master
+  - /release.*/
