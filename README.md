@@ -4,25 +4,28 @@ A build system inspired by [spring boot auto configure](https://docs.spring.io/s
 
 ### Your Project build.gradle To Use The Build System
 
-
-#### latest
-
 ```
 buildscript {
-    apply from: System.properties.buildscriptUrl ?: System.getenv().buildscriptUrl ?: project.hasProperty('buildscriptUrl') ? project.ext.buildscriptUrl : 'https://jcenter.bintray.com/com/github/mrduguo/gradle/gradle-buildscript/buildscript.gradle'
+    ext.config = { key, defaultValue = null -> System.properties[key] ?: System.getenv()[key] ?: project.hasProperty(key) ? project.ext[key] : defaultValue }
+    apply from: config('buildscriptUrl') ?: "${config('mavenRepoUrl', 'https://jcenter.bintray.com/')}com/github/mrduguo/gradle/gradle-buildscript/${config('buildscriptVersion') ? "${config('buildscriptVersion')}/gradle-buildscript-${config('buildscriptVersion')}-buildscript.gradle" : 'buildscript.gradle'}"
 }
 apply plugin: 'com.github.mrduguo.gradle.buildscript'
 ```
 
 
-#### released version
-
+#### Use a released version
+Set the `buildscriptVersion` variable via 
+* system properties
 ```
-buildscript {
-    System.properties.buildscriptVersion='0.3.0-161110-230541-d12d447-43'
-    apply from: System.properties.buildscriptUrl ?: System.getenv().buildscriptUrl ?: project.hasProperty('buildscriptUrl') ? project.ext.buildscriptUrl : "${System.properties.mavenRepoUrl ?: 'https://dl.bintray.com/mrduguo/maven/'}com/github/mrduguo/gradle/gradle-buildscript/${System.properties.buildscriptVersion}/gradle-buildscript-${System.properties.buildscriptVersion}-buildscript.gradle"
-}
-apply plugin: 'com.github.mrduguo.gradle.buildscript'
+-DbuildscriptVersion=0.3.0-180126-113820-29d4090-50
+```
+* envrionment variables
+```
+export buildscriptVersion=0.3.0-180126-113820-29d4090-50
+```
+* gradle.properties
+```
+buildscriptVersion=0.3.0-180126-113820-29d4090-50
 ```
 
 
