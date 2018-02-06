@@ -6,8 +6,10 @@ import com.github.mrduguo.gradle.buildscript.utils.ProjectHelper
 class DockerPushTask extends AbstractDockerTask {
 
     def execDockerCommands() {
-        def versionedTag = "$dockerTag:${ProjectHelper.project.version}"
-        runDockerCmd("docker push $versionedTag")
+        if(dockerEnableVersion){
+            def versionedTag = "$dockerTag:${ProjectHelper.project.version}"
+            runDockerCmd("docker push $versionedTag")
+        }
         if(dockerEnableBaseVersion){
             def baseVersionTag="$dockerTag:${Env.config('baseVersion')}"
             runDockerCmd("docker push $baseVersionTag")
