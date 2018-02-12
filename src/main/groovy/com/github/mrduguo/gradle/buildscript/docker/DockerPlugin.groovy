@@ -59,7 +59,7 @@ class DockerPlugin implements Plugin<Project> {
         if (Env.config('dockerPush')) {
             dockerPush = Env.config('dockerPush').toBoolean()
         } else {
-            dockerPush = Env.jobName() ? true : false
+            dockerPush = Env.jobName() ? Env.config('CHANGE_TARGET')==null : false
         }
 
         if (dockerPush) {
