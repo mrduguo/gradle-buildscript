@@ -39,12 +39,20 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
             project.ext.set('baseVersion', project.libBuildscriptVersion.split('-').first())
         }
         def jvmStartTime=new Date(java.lang.management.ManagementFactory.getRuntimeMXBean().getStartTime())
-        project.version = "${Env.config('baseVersion')}-${jvmStartTime.format('yyMMdd-HHmmss')}".toString()
-        def gitInfo=Env.gitInfo()
-        if(gitInfo){
-            project.version = "${project.version}-${gitInfo.commit}-${gitInfo.buildNumber}".toString()
-        }
+        project.version = detectProjectVersion(project,jvmStartTime)
         println "${jvmStartTime.format('yy-MM-dd HH:mm:ss')}  kick off build with buildscript version $project.libBuildscriptVersion"
+    }
+
+    String detectProjectVersion(Project project,def jvmStartTime) {
+        def version=Env.config('version')
+        if(version==null){
+            version = "${Env.config('baseVersion')}-${jvmStartTime.format('yyMMdd-HHmmss')}".toString()
+            def gitInfo=Env.gitInfo()
+            if(gitInfo){
+                version = "${version}-${gitInfo.commit}-${gitInfo.buildNumber}".toString()
+            }
+        }
+        version
     }
 
     def activeProjectLanguageSupport(Project project) {
