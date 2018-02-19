@@ -45,7 +45,7 @@ class BuildscriptGradlePlugin implements Plugin<Project> {
 
     String detectProjectVersion(Project project,def jvmStartTime) {
         def version=Env.config('version')
-        if(version==null){
+        if(version=='unspecified'){
             version = "${Env.config('baseVersion')}-${jvmStartTime.format('yyMMdd-HHmmss')}".toString()
             def gitInfo=Env.gitInfo()
             if(gitInfo){
