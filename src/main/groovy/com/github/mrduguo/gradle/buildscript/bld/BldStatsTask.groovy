@@ -27,7 +27,7 @@ class BldStatsTask extends DefaultTask {
 
         println "\n\n\nProject Ext:"
         project.getExtensions().extraProperties.properties.sort().each { k, v ->
-            println "$k = $v"
+            println v? "$k = $v": "$k = null"
         }
         println "project.version = $project.version"
     }
