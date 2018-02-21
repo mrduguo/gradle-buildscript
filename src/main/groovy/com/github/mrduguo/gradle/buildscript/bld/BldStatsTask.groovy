@@ -26,7 +26,7 @@ class BldStatsTask extends DefaultTask {
         execGitCommand 'git rev-parse --short HEAD'
 
         println "\n\n\nProject Ext:"
-        project.getExtensions().extraProperties.properties.sort().each { def k, v ->
+        project.getExtensions().extraProperties.properties.sort().each { k, v ->
             println "$k = $v"
         }
         println "project.version = $project.version"
